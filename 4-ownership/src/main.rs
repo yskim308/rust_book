@@ -15,6 +15,15 @@ fn main() {
     // owernship given by return value
     let given = gives_ownership();
     println!("{given}");
+
+    // given passed as reference, ownership NOT transferred
+    let length = calculate_length(&given);
+    println!(" length of {given}:{length}");
+
+    // to mutate the refernece, create mutable refernece and pass it
+    let mut mutable_str = given;
+    change_string(&mut mutable_str);
+    println!("{mutable_str}");
 }
 
 fn takes_ownership(some_string: String) {
@@ -26,4 +35,12 @@ fn takes_ownership(some_string: String) {
 fn gives_ownership() -> String {
     let some_string = String::from("yours now");
     some_string
+}
+
+fn calculate_length(s: &String) -> usize {
+    s.len()
+}
+
+fn change_string(s: &mut String) {
+    s.push_str(", mutated");
 }
