@@ -24,6 +24,16 @@ fn main() {
     let mut mutable_str = given;
     change_string(&mut mutable_str);
     println!("{mutable_str}");
+
+    // slicing
+    let literal = "hello world";
+    let string_example = String::from("hello world");
+
+    let literal_first = first_word(&literal);
+    let string_first = first_word(&string_example);
+
+    println!("{literal_first}");
+    println!("{string_first}");
 }
 
 fn takes_ownership(some_string: String) {
@@ -43,4 +53,14 @@ fn calculate_length(s: &String) -> usize {
 
 fn change_string(s: &mut String) {
     s.push_str(", mutated");
+}
+
+fn first_word(s: &str) -> &str {
+    // use string literals
+    for (idx, &chr) in s.as_bytes().iter().enumerate() {
+        if chr == b' ' {
+            return &s[0..idx];
+        }
+    }
+    &s[..]
 }
