@@ -1,3 +1,4 @@
+mod asynchronous_programming;
 mod fearless_concurrency;
 
 use fearless_concurrency::{channel, mutex, threads};
