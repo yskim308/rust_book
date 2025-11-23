@@ -1,8 +1,6 @@
 mod fearless_concurrency;
-mod messaging;
 
-use fearless_concurrency::threads;
-use messaging::channel;
+use fearless_concurrency::{channel, threads};
 
 fn main() {
     println!("-------------- Basic threads example: -------------");
