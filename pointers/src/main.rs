@@ -30,12 +30,20 @@ impl<T: std::fmt::Debug> Drop for CustomSmartPointer<T> {
 
 // ---- implementation to demonstrate Rc and RefCel -----
 use std::cell::RefCell;
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 
 #[derive(Debug)]
 enum List {
     Cons(Rc<RefCell<i32>>, Rc<List>),
     Nil,
+}
+
+// ===== implementation of tree ======
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    parent: RefCell<Weak<Node>>,
+    children: RefCell<Vec<Rc<Node>>>,
 }
 
 fn main() {
@@ -66,4 +74,19 @@ fn main() {
     println!("a after = {a:?}");
     println!("b after = {b:?}");
     println!("c after = {c:?}");
+
+    // ====== examples for node/tree ===========
+    let child = Rc::new(Node {
+        value: 5,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
+
+    let parent = Rc::new(Node {
+        value: 10,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![Rc::clone(&child)]),
+    });
+
+    *child.parent.borrow_mut() = Rc::downgrade(&parent);
 }
