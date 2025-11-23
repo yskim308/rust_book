@@ -59,22 +59,10 @@ fn main() {
     // --- examples for Rc and RefCell -----
     let value = Rc::new(RefCell::new(5));
 
-    // a is a new countable reference to a list where
-    // value : countable reference to value (clone)
-    // list : Nil
     let a = Rc::new(List::Cons(Rc::clone(&value), Rc::new(List::Nil)));
-
-    // b is a new list where
-    // value: mutable refcell of 3
-    // list: the list a (which can have multiple references)
     let b = List::Cons(Rc::new(RefCell::new(3)), Rc::clone(&a));
-
-    // same as b
     let c = List::Cons(Rc::new(RefCell::new(5)), Rc::clone(&a));
-
     *value.borrow_mut() += 10;
-
-    // ssentially, every value in the list is a multi-referenced interior mutable value
     println!("a after = {a:?}");
     println!("b after = {b:?}");
     println!("c after = {c:?}");
