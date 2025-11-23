@@ -1,6 +1,7 @@
 mod asynchronous_programming;
 mod fearless_concurrency;
 
+use asynchronous_programming::asynchronous;
 use fearless_concurrency::{channel, mutex, threads};
 
 fn main() {
@@ -14,4 +15,7 @@ fn main() {
 
     println!("-------------- basic mutex example: ---------------");
     mutex::run_basic_example();
+
+    println!("--------------- async examples -------------------");
+    asynchronous::run_basic_example();
 }
