@@ -20,11 +20,41 @@ pub fn run_basic_example() {
 pub fn run_channel_example() {
     trpl::run(async {
         let (tx, mut rx) = trpl::channel();
+        let tx1 = tx.clone();
 
-        let val = String::from("hi");
-        tx.send(val).unwrap();
+        let tx_future = async move {
+            let vals = vec![
+                String::from("hi"),
+                String::from("from"),
+                String::from("the"),
+                String::from("future"),
+            ];
+            for val in vals {
+                tx.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
 
-        let receieved = rx.recv().await.unwrap();
-        println!("receieved `{receieved}`");
+        let tx1_future = async move {
+            let vals = vec![
+                String::from("more"),
+                String::from("messages"),
+                String::from("for"),
+                String::from("you"),
+            ];
+
+            for val in vals {
+                tx1.send(val).unwrap();
+                trpl::sleep(Duration::from_millis(500)).await;
+            }
+        };
+
+        let rx_future = async {
+            while let Some(value) = rx.recv().await {
+                println!("received `{value}`");
+            }
+        };
+
+        trpl::join3(tx_future, tx1_future, rx_future).await;
     })
 }
